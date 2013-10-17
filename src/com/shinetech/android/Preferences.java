@@ -36,6 +36,9 @@ public class Preferences {
 	}
 
 	public void setVicinityRadius(int vicinityRadius) {
+		if (vicinityRadius == 0){
+			vicinityRadius++;
+		}
 		this.vicinityRadius = vicinityRadius;
 	}
 
