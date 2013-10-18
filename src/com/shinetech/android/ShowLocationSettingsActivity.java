@@ -163,7 +163,7 @@ public class ShowLocationSettingsActivity extends Activity {
 
 	private void restorePreferences() {
 		Log.i(TAG, "restorePreferences");
-		Preferences preferences = ((LocationMapperApplication) getApplicationContext()).getPreferences();
+		Preferences preferences = ((YanApplication) getApplicationContext()).getPreferences();
 
 		setStoredLocation(preferences.getLocation());
 
@@ -180,7 +180,7 @@ public class ShowLocationSettingsActivity extends Activity {
 	private void storePreferences(Location location, int vicinityRadius, int sampleInterval, int sampleDistance) {
 		Log.i(TAG, "storePreferences");
 
-		Preferences preferences = ((LocationMapperApplication) getApplicationContext()).getPreferences();
+		Preferences preferences = ((YanApplication) getApplicationContext()).getPreferences();
 		preferences.setLocation(location);
 		preferences.setVicinityRadius(vicinityRadius);
 		preferences.setSampleDistance(sampleDistance);

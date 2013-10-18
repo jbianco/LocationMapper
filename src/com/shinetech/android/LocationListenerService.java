@@ -126,9 +126,9 @@ public class LocationListenerService extends Service implements
 	}
 
 	private void requestLocationUpdates() {
-		int sampleDistance = ((LocationMapperApplication) getApplication())
+		int sampleDistance = ((YanApplication) getApplication())
 				.getPreferences().getSampleDistance();
-		int sampleInterval = ((LocationMapperApplication) getApplication())
+		int sampleInterval = ((YanApplication) getApplication())
 				.getPreferences().getSampleInterval() * 1000 * 60;
 		Log.i(TAG, "Setting up location updates with sample distance "
 				+ sampleDistance + " m and sample interval " + sampleInterval
@@ -146,11 +146,11 @@ public class LocationListenerService extends Service implements
 
 	private void addProximityAlert() {
 		Log.i(TAG, "addProximityAlert()");
-		int vicinityRadius = ((LocationMapperApplication) getApplication())
+		int vicinityRadius = ((YanApplication) getApplication())
 				.getPreferences().getVicinityRadius();
-		double latitude = ((LocationMapperApplication) getApplication())
+		double latitude = ((YanApplication) getApplication())
 				.getPreferences().getLocation().getLatitude();
-		double longitude = ((LocationMapperApplication) getApplication())
+		double longitude = ((YanApplication) getApplication())
 				.getPreferences().getLocation().getLongitude();
 
 		long expiration = -1;

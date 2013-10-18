@@ -10,12 +10,12 @@ The second part is an HTML page to draw the data onto a Google Map. Selectboxes 
 The Android application records location data from GPS and network provider  as well as proximity alerts in a database. It is set up as a service and runs in the background. 
 A list of the data recorded can be seen when the application runs in the foreground.
 
-![alt Android Location Mapper Locations List](http://github.com/marcfasel/LocationMapper/raw/master/LocationMapperLocations.png "Android Location Mapper Locations List")
+![alt Android Location Mapper Locations List](http://github.com/jabianco/LocationMapper/raw/master/LocationMapperLocations.png "Android Location Mapper Locations List")
 
 ###Settings
 The application can be configured via the settings dialog.
  
-![alt Android Location Mapper Settings](http://github.com/marcfasel/LocationMapper/raw/master/LocationMapperSettings.png "Android Location Mapper Settings")
+![alt Android Location Mapper Settings](http://github.com/jabianco/LocationMapper/raw/master/LocationMapperSettings.png "Android Location Mapper Settings")
 
 For GPS- and network location providers the update interval and the update distance can be set.
 
@@ -27,6 +27,6 @@ The settings dialog also has a button to clear the database.
 ##Google Maps Application
 The folder html/ contains the Google Maps app RenderLocation.html.
 
-![alt Google Maps Location Mapper](http://github.com/marcfasel/LocationMapper/raw/master/GoogleMapsLocationMapper.png "Google Maps Location Mapper")
+![alt Google Maps Location Mapper](http://github.com/jabianco/LocationMapper/raw/master/GoogleMapsLocationMapper.png "Google Maps Location Mapper")
 
 On the page the CSV data emailed previously can be pasted into the text area. Select from network, GPS, or proximity alert data, then press Render to view the data drawn on the map.  
