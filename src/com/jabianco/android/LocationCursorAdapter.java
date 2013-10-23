@@ -1,4 +1,4 @@
-package com.shinetech.android;
+package com.jabianco.android;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;

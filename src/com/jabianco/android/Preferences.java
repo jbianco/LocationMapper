@@ -1,4 +1,4 @@
-package com.shinetech.android;
+package com.jabianco.android;
 
 import android.content.SharedPreferences;
 import android.location.Location;

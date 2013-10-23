@@ -1,4 +1,4 @@
-package com.shinetech.android;
+package com.jabianco.android;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,7 +83,7 @@ public class ShowLocationSettingsActivity extends Activity {
 		dbAdapter.close();
 
 		// Inform the LocationListenerService about possible changes
-		Intent intent = new Intent("com.shinetech.android.PREFERENCES_CHANGED");
+		Intent intent = new Intent("com.jabianco.android.PREFERENCES_CHANGED");
 		sendBroadcast(intent);
 	}
 

@@ -1,4 +1,4 @@
-package com.shinetech.android;
+package com.jabianco.android;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class LocationListenerService extends Service implements
 		LocationListener {
 
 	public static final int UPDATE_MESSAGE = 1;
-	public static final String PROXIMTY_ALERT_INTENT = "com.shinetech.android.PROXIMTY_ALERT";
-	public static final String PREFERNCES_CHANGED_INTENT = "com.shinetech.android.PREFERENCES_CHANGED";
+	public static final String PROXIMTY_ALERT_INTENT = "com.jabianco.android.PROXIMTY_ALERT";
+	public static final String PREFERNCES_CHANGED_INTENT = "com.jabianco.android.PREFERENCES_CHANGED";
 
 	private static final String TAG = LocationListenerService.class.toString();
 	private LocationManager locationManager;
@@ -83,7 +83,7 @@ public class LocationListenerService extends Service implements
 
 		// TODO Normally this is declared in the Manifest
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("com.shinetech.android.PREFERENCES_CHANGED");
+		intentFilter.addAction("com.jabianco.android.PREFERENCES_CHANGED");
 		this.registerReceiver(this.broadcastReceiver, intentFilter);
 
 	}
@@ -108,7 +108,7 @@ public class LocationListenerService extends Service implements
 	private void addLocationToDB(Location location) {
 		Log.i(TAG, "Location changed: " + location.toString());
 		dbAdapter.addLocation(location);
-		Intent intent = new Intent("com.shinetech.android.UPDATE_UI");
+		Intent intent = new Intent("com.jabianco.android.UPDATE_UI");
 		sendBroadcast(intent);
 		Log.i(TAG, "UPDATE_UI intent broadcasted");
 	}

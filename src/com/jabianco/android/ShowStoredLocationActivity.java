@@ -1,4 +1,4 @@
-package com.shinetech.android;
+package com.jabianco.android;
 
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
@@ -75,7 +75,7 @@ public class ShowStoredLocationActivity extends ListActivity implements
 				dbAdapter.fetchAllLocations(), from, to);
 		this.setListAdapter(cursorAdapter);
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("com.shinetech.android.UPDATE_UI");
+		intentFilter.addAction("com.jabianco.android.UPDATE_UI");
 		this.registerReceiver(this.broadcastReceiver, intentFilter);
 		getCursorAdapter().getCursor().requery();
 		getCursorAdapter().notifyDataSetChanged();
