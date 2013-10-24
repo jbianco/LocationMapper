@@ -16,9 +16,12 @@ public class LocationCursorAdapter extends SimpleCursorAdapter {
 	private Cursor c;
 	private Context context;
 
+	@SuppressWarnings("unused")
 	private static final String TAG = LocationCursorAdapter.class.toString();
-	
-	public LocationCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+
+	@SuppressWarnings("deprecation")
+	public LocationCursorAdapter(Context context, int layout, Cursor c,
+			String[] from, int[] to) {
 		super(context, layout, c, from, to);
 		this.c = c;
 		this.context = context;
@@ -27,24 +30,36 @@ public class LocationCursorAdapter extends SimpleCursorAdapter {
 	public View getView(int pos, View inView, ViewGroup parent) {
 		View v = inView;
 		if (v == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.stored_locations_row_layout, null);
 		}
 
 		this.c.moveToPosition(pos);
-		String value = this.c.getString(this.c.getColumnIndex(LocationDbAdapter.KEY_NAME));
+		String value = this.c.getString(this.c
+				.getColumnIndex(LocationDbAdapter.KEY_NAME));
 		TextView view = (TextView) v.findViewById(R.id.locationname);
 		view.setText(value);
-		String latitude = new DecimalFormat("###.####").format(this.c.getDouble(this.c.getColumnIndex(LocationDbAdapter.KEY_LATITUDE)));
+		String latitude = new DecimalFormat("###.####").format(this.c
+				.getDouble(this.c
+						.getColumnIndex(LocationDbAdapter.KEY_LATITUDE)));
 		view = (TextView) v.findViewById(R.id.locationlatitude);
 		view.setText(latitude);
-		String longitude = new DecimalFormat("###.####").format(this.c.getDouble(this.c.getColumnIndex(LocationDbAdapter.KEY_LONGITUDE)));
+		String longitude = new DecimalFormat("###.####").format(this.c
+				.getDouble(this.c
+						.getColumnIndex(LocationDbAdapter.KEY_LONGITUDE)));
 		view = (TextView) v.findViewById(R.id.locationlongitude);
 		view.setText(longitude);
-		value = new DecimalFormat("####").format(this.c.getLong(this.c.getColumnIndex(LocationDbAdapter.KEY_ACCURACY)));
+		String speed = new DecimalFormat("###.##").format(this.c
+				.getFloat(this.c.getColumnIndex(LocationDbAdapter.KEY_SPEED)));
+		view = (TextView) v.findViewById(R.id.locationspd);
+		view.setText(speed);
+		value = new DecimalFormat("####").format(this.c.getLong(this.c
+				.getColumnIndex(LocationDbAdapter.KEY_ACCURACY)));
 		view = (TextView) v.findViewById(R.id.locationaccuracy);
 		view.setText(value);
-		value = new SimpleDateFormat("HH:mm:ss").format(new Date(this.c.getLong(this.c.getColumnIndex(LocationDbAdapter.KEY_TIME))));
+		value = new SimpleDateFormat("HH:mm:ss").format(new Date(this.c
+				.getLong(this.c.getColumnIndex(LocationDbAdapter.KEY_TIME))));
 		view = (TextView) v.findViewById(R.id.locationtime);
 		view.setText(value);
 		return (v);

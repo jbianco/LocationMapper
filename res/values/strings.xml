@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Yan</string>
     <string name="settings">Settings</string>
+    <string name="serviceStart">Start</string>
+    <string name="serviceStop">Stop</string>
+    <string name="showMap">Show Map</string>
 </resources>

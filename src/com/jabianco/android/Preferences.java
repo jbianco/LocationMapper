@@ -15,10 +15,6 @@ public class Preferences {
 
 	private SharedPreferences sharedPreferences;
 
-	private Preferences() {
-		// Private CTOR: Can't use this
-	}
-
 	public Preferences(SharedPreferences sharedPreferences) {
 		this.sharedPreferences = sharedPreferences;
 	}
@@ -36,7 +32,7 @@ public class Preferences {
 	}
 
 	public void setVicinityRadius(int vicinityRadius) {
-		if (vicinityRadius == 0){
+		if (vicinityRadius == 0) {
 			vicinityRadius++;
 		}
 		this.vicinityRadius = vicinityRadius;
@@ -65,6 +61,7 @@ public class Preferences {
 		// TODO: These are actually doubles not floats
 		this.location.setLatitude(sharedPreferences.getFloat("latitude", 0f));
 		this.location.setLongitude(sharedPreferences.getFloat("longitude", 0f));
+		this.location.setSpeed(sharedPreferences.getFloat("speed", 0f));
 		this.location.setAccuracy(sharedPreferences.getFloat("accuracy", 0f));
 		this.location.setTime(sharedPreferences.getLong("time", 0l));
 
@@ -79,6 +76,7 @@ public class Preferences {
 		editor.putString("name", location.getProvider());
 		editor.putFloat("latitude", (float) location.getLatitude());
 		editor.putFloat("longitude", (float) location.getLongitude());
+		editor.putFloat("speed", location.getSpeed());
 		editor.putFloat("accuracy", location.getAccuracy());
 		editor.putLong("time", location.getTime());
 		editor.putInt("vicinityradius", vicinityRadius);

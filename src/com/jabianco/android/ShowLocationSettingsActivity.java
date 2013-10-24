@@ -1,9 +1,9 @@
 package com.jabianco.android;
 
 import java.io.File;
-import java.io.FileInputStream;
+//import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
+//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.client.ClientProtocolException;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.entity.InputStreamEntity;
+//import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,7 +45,7 @@ public class ShowLocationSettingsActivity extends Activity {
 	private LocationManager locationManager;
 	private Location currentLocation = null;
 	private Location storedLocation = null;
-	private Context context = null; 
+	private Context context = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ShowLocationSettingsActivity extends Activity {
 
 		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		this.context = this;
-		
+
 		dbAdapter = new LocationDbAdapter(this);
 
 		setCurrentLocation();
@@ -78,7 +78,8 @@ public class ShowLocationSettingsActivity extends Activity {
 		editText = (EditText) findViewById(R.id.sampledistance);
 		int sampleDistance = Integer.parseInt(editText.getText().toString());
 
-		storePreferences(storedLocation, vicinityRadius, sampleInterval, sampleDistance);
+		storePreferences(storedLocation, vicinityRadius, sampleInterval,
+				sampleDistance);
 
 		dbAdapter.close();
 
@@ -97,7 +98,8 @@ public class ShowLocationSettingsActivity extends Activity {
 	public void onClearDataBase(View view) {
 		Log.i(TAG, "onClearDataBase");
 		int rows = dbAdapter.clearDatabase();
-		Toast.makeText(this, "Deleted " + rows + " rows.", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Deleted " + rows + " rows.", Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	private void setCurrentLocation() {
@@ -107,13 +109,19 @@ public class ShowLocationSettingsActivity extends Activity {
 			TextView view = (TextView) findViewById(R.id.currentlocationname);
 			view.setText(location.getProvider());
 			view = (TextView) findViewById(R.id.currentlocationlatitude);
-			view.setText(new DecimalFormat("###.####").format(location.getLatitude()));
+			view.setText(new DecimalFormat("###.####").format(location
+					.getLatitude()));
 			view = (TextView) findViewById(R.id.currentlocationlongitude);
-			view.setText(new DecimalFormat("###.####").format(location.getLongitude()));
+			view.setText(new DecimalFormat("###.####").format(location
+					.getLongitude()));
+			view = (TextView) findViewById(R.id.currentlocationspd);
+			view.setText(new DecimalFormat("###.##").format(location.getSpeed()));
 			view = (TextView) findViewById(R.id.currentlocationtime);
-			view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(location.getTime())));
+			view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(
+					location.getTime())));
 			view = (TextView) findViewById(R.id.currentlocationaccuracy);
-			view.setText(new DecimalFormat("####").format(location.getAccuracy()));
+			view.setText(new DecimalFormat("####").format(location
+					.getAccuracy()));
 		}
 	}
 
@@ -124,11 +132,16 @@ public class ShowLocationSettingsActivity extends Activity {
 		TextView view = (TextView) findViewById(R.id.storedlocationname);
 		view.setText(location.getProvider());
 		view = (TextView) findViewById(R.id.storedlocationlatitude);
-		view.setText(new DecimalFormat("###.####").format(location.getLatitude()));
+		view.setText(new DecimalFormat("###.####").format(location
+				.getLatitude()));
 		view = (TextView) findViewById(R.id.storedlocationlongitude);
-		view.setText(new DecimalFormat("###.####").format(location.getLongitude()));
+		view.setText(new DecimalFormat("###.####").format(location
+				.getLongitude()));
+		view = (TextView) findViewById(R.id.storedlocationspd);
+		view.setText(new DecimalFormat("###.##").format(location.getSpeed()));
 		view = (TextView) findViewById(R.id.storedlocationtime);
-		view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(location.getTime())));
+		view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(location
+				.getTime())));
 		view = (TextView) findViewById(R.id.storedlocationaccuracy);
 		view.setText(new DecimalFormat("####").format(location.getAccuracy()));
 	}
@@ -146,13 +159,15 @@ public class ShowLocationSettingsActivity extends Activity {
 			if (location != null) {
 				float accuracy = location.getAccuracy();
 				long time = location.getTime();
-				Log.i(TAG, "TIME= " + time + ", minTime= " + minTime + ", bestTime= " + bestTime + ", accuracy= "
-						+ accuracy + ", bestAccuracy= " + bestAccuracy);
+				Log.i(TAG, "TIME= " + time + ", minTime= " + minTime
+						+ ", bestTime= " + bestTime + ", accuracy= " + accuracy
+						+ ", bestAccuracy= " + bestAccuracy);
 				if ((time > minTime && accuracy < bestAccuracy)) {
 					bestResult = location;
 					bestAccuracy = accuracy;
 					bestTime = time;
-				} else if (time < minTime && bestAccuracy == Float.MAX_VALUE && time > bestTime) {
+				} else if (time < minTime && bestAccuracy == Float.MAX_VALUE
+						&& time > bestTime) {
 					bestResult = location;
 					bestTime = time;
 				}
@@ -163,7 +178,8 @@ public class ShowLocationSettingsActivity extends Activity {
 
 	private void restorePreferences() {
 		Log.i(TAG, "restorePreferences");
-		Preferences preferences = ((YanApplication) getApplicationContext()).getPreferences();
+		Preferences preferences = ((YanApplication) getApplicationContext())
+				.getPreferences();
 
 		setStoredLocation(preferences.getLocation());
 
@@ -177,10 +193,12 @@ public class ShowLocationSettingsActivity extends Activity {
 		view.setText(Integer.toString(preferences.getSampleDistance()));
 	}
 
-	private void storePreferences(Location location, int vicinityRadius, int sampleInterval, int sampleDistance) {
+	private void storePreferences(Location location, int vicinityRadius,
+			int sampleInterval, int sampleDistance) {
 		Log.i(TAG, "storePreferences");
 
-		Preferences preferences = ((YanApplication) getApplicationContext()).getPreferences();
+		Preferences preferences = ((YanApplication) getApplicationContext())
+				.getPreferences();
 		preferences.setLocation(location);
 		preferences.setVicinityRadius(vicinityRadius);
 		preferences.setSampleDistance(sampleDistance);
@@ -204,7 +222,6 @@ public class ShowLocationSettingsActivity extends Activity {
 		emailDataTask.execute();
 	}
 
-	
 	private class EmailDataTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... urls) {
@@ -225,36 +242,52 @@ public class ShowLocationSettingsActivity extends Activity {
 		}
 
 		private void emailData() {
-			final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND_MULTIPLE);
+			final Intent emailIntent = new Intent(
+					android.content.Intent.ACTION_SEND_MULTIPLE);
 			emailIntent.setType("plain/text");
-	        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Location Mapper Data");
-	        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Location Mapper Data");
-	 
-	        ArrayList<Uri> uris = new ArrayList<Uri>();
+			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+					"Location Mapper Data");
+			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+					"Location Mapper Data");
 
-			File fileIn = new File(Environment.getExternalStorageDirectory(),"data.csv");
-			
+			ArrayList<Uri> uris = new ArrayList<Uri>();
+
+			File fileIn = new File(Environment.getExternalStorageDirectory(),
+					"data.csv");
+
 			Uri u = Uri.fromFile(fileIn);
-	        uris.add(u);
-			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris); 
-			context.startActivity(Intent.createChooser(emailIntent, "Send mail...")); 
+			uris.add(u);
+			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+			context.startActivity(Intent.createChooser(emailIntent,
+					"Send mail..."));
 		}
 
 		private void writeDbDataToTempFile() throws IOException {
 			Log.i(TAG, "writeDbDataToTempFile");
 			String data = "";
-			File dataFile = new File(Environment.getExternalStorageDirectory(),"data.csv");
+			File dataFile = new File(Environment.getExternalStorageDirectory(),
+					"data.csv");
 			FileOutputStream fileOutputStream = new FileOutputStream(dataFile);
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+					fileOutputStream);
 
 			Cursor cursor = dbAdapter.fetchAllLocations();
 			cursor.moveToFirst();
 
 			Log.i(TAG, "Writing " + cursor.getCount() + " records.");
 			while (cursor.isAfterLast() == false) {
-				data = cursor.getDouble(2) + "," + cursor.getDouble(3) + "," + cursor.getInt(4) + ","
-						+ cursor.getString(1) + ","
-						+ new SimpleDateFormat("HH:mm:ss").format(new Date(cursor.getLong(5))) + "\n";
+				data = cursor.getDouble(2)
+						+ ","
+						+ cursor.getDouble(3)
+						+ cursor.getFloat(6)
+						+ ","
+						+ ","
+						+ cursor.getInt(4)
+						+ ","
+						+ cursor.getString(1)
+						+ ","
+						+ new SimpleDateFormat("HH:mm:ss").format(new Date(
+								cursor.getLong(5))) + "\n";
 				Log.i(TAG, data);
 				outputStreamWriter.write(data);
 				cursor.moveToNext();
@@ -264,8 +297,5 @@ public class ShowLocationSettingsActivity extends Activity {
 			cursor.close();
 			Log.i(TAG, "Done.");
 		}
-
 	}
-
-
 }

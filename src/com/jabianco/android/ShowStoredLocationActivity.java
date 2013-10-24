@@ -1,5 +1,7 @@
 package com.jabianco.android;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 public class ShowStoredLocationActivity extends ListActivity implements
 		OnClickListener {
@@ -33,7 +36,20 @@ public class ShowStoredLocationActivity extends ListActivity implements
 		this.cursorAdapter = cursorAdapter;
 	}
 
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if (LocationListenerService.class.getName().equals(
+					service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@SuppressWarnings("deprecation")
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.i(TAG, "Received UPDATE_UI message");
@@ -50,14 +66,15 @@ public class ShowStoredLocationActivity extends ListActivity implements
 
 		dbAdapter = new LocationDbAdapter(this);
 
-		stopButton = (Button) findViewById(R.id.stop_button);
-		startButton = (Button) findViewById(R.id.start_button);
+		stopButton = (Button) findViewById(R.id.map_button);
+		startButton = (Button) findViewById(R.id.service_button);
 
 		stopButton.setOnClickListener(this);
 		startButton.setOnClickListener(this);
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onResume() {
 		Log.i(TAG, "onResume()");
@@ -65,11 +82,11 @@ public class ShowStoredLocationActivity extends ListActivity implements
 		dbAdapter.open();
 		String[] from = { LocationDbAdapter.KEY_NAME,
 				LocationDbAdapter.KEY_LATITUDE,
-				LocationDbAdapter.KEY_LONGITUDE,
+				LocationDbAdapter.KEY_LONGITUDE, LocationDbAdapter.KEY_SPEED,
 				LocationDbAdapter.KEY_ACCURACY, LocationDbAdapter.KEY_TIME };
 		int[] to = { R.id.locationname, R.id.locationlatitude,
-				R.id.locationlongitude, R.id.locationaccuracy,
-				R.id.locationtime };
+				R.id.locationlongitude, R.id.locationspd,
+				R.id.locationaccuracy, R.id.locationtime };
 		cursorAdapter = new LocationCursorAdapter(this,
 				R.layout.stored_locations_row_layout,
 				dbAdapter.fetchAllLocations(), from, to);
@@ -111,11 +128,17 @@ public class ShowStoredLocationActivity extends ListActivity implements
 		ComponentName locationListenerServiceName = new ComponentName(
 				getPackageName(), LocationListenerService.class.getName());
 		Intent i = new Intent().setComponent(locationListenerServiceName);
-
-		if (v.getId() == R.id.start_button) {
-			startService(i);
-		} else if (v.getId() == R.id.stop_button) {
-			stopService(i);
+		if (v.getId() == R.id.service_button) {
+			TextView buttonText = (TextView) findViewById(R.id.service_button);
+			if (this.isMyServiceRunning()) {
+				stopService(i);
+				buttonText.setText(getResources().getString(R.string.serviceStart));
+				Log.i(TAG, "location service stopped...");
+			} else {
+				startService(i);
+				buttonText.setText(getResources().getString(R.string.serviceStop));
+				Log.i(TAG, "location service started...");
+			}
 		}
 	}
 }
