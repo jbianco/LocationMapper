@@ -25,8 +25,8 @@ public class ShowStoredLocationActivity extends ListActivity implements
 
 	private LocationDbAdapter dbAdapter;
 	private SimpleCursorAdapter cursorAdapter;
-	private Button stopButton;
-	private Button startButton;
+	private Button mapButton;
+	private Button serviceButton;
 
 	public SimpleCursorAdapter getCursorAdapter() {
 		return cursorAdapter;
@@ -66,11 +66,11 @@ public class ShowStoredLocationActivity extends ListActivity implements
 
 		dbAdapter = new LocationDbAdapter(this);
 
-		stopButton = (Button) findViewById(R.id.map_button);
-		startButton = (Button) findViewById(R.id.service_button);
+		mapButton = (Button) findViewById(R.id.map_button);
+		serviceButton = (Button) findViewById(R.id.service_button);
 
-		stopButton.setOnClickListener(this);
-		startButton.setOnClickListener(this);
+		mapButton.setOnClickListener(this);
+		serviceButton.setOnClickListener(this);
 
 	}
 
@@ -132,13 +132,23 @@ public class ShowStoredLocationActivity extends ListActivity implements
 			TextView buttonText = (TextView) findViewById(R.id.service_button);
 			if (this.isMyServiceRunning()) {
 				stopService(i);
-				buttonText.setText(getResources().getString(R.string.serviceStart));
+				buttonText.setText(getResources().getString(
+						R.string.serviceStart));
 				Log.i(TAG, "location service stopped...");
 			} else {
 				startService(i);
-				buttonText.setText(getResources().getString(R.string.serviceStop));
+				buttonText.setText(getResources().getString(
+						R.string.serviceStop));
 				Log.i(TAG, "location service started...");
 			}
+		} else {
+			startActivity(new Intent(this, DisplayLocationActivity.class));
+/*			Intent intentApp = new Intent(CurrentActivity.this,
+					ThirdActivity.class);
+			CurrentActivity.this.startActivity(intentApp);
+			Log.i("Content ", " App layout ");*/
+/*			startActivity(new Intent(ShowLocationSettingsActivity.this,  .class));*/
+//			Here we will change the screen to the webview
 		}
 	}
 }

@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.jabianco.android" android:versionCode="1"
-	android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="8" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<application android:name=".YanApplication" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:debuggable="true" android:logo="@drawable/ic_launcher">
-		<uses-library android:name="com.google.android.maps"/>
-		<activity android:name=".ShowStoredLocationActivity"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity android:name=".ShowLocationSettingsActivity" android:windowSoftInputMode="stateHidden"/>
-		<service android:name=".LocationListenerService"
-			android:enabled="true" android:exported="false" android:label="LocationListenerService">
-		</service>
-	</application>
+    package="com.jabianco.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="com.jabianco.android.YanApplication"
+        android:debuggable="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:logo="@drawable/ic_launcher" >
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity
+            android:name="com.jabianco.android.ShowStoredLocationActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jabianco.android.ShowLocationSettingsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.jabianco.android.ShowDisplayedLocationActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <service
+            android:name="com.jabianco.android.LocationListenerService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="LocationListenerService" >
+        </service>
+
+        <activity
+            android:name="com.jabianco.android.DisplayLocationActivity"
+            android:label="@string/title_activity_display_location" >
+        </activity>
+    </application>
+
 </manifest>

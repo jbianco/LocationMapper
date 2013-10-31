@@ -40,6 +40,59 @@ html, body {
 		map.setCenter(new google.maps.LatLng(OFFICE_LAT, OFFICE_LNG));
 	}
 
+////////////////////////////////////////////////////////////////////////
+//              Reading file to show new data in the map              //
+////////////////////////////////////////////////////////////////////////
+
+/*    var reader; //GLOBAL File Reader object for demo purpose only
+
+	function readText(filePath) {
+        var output = ""; //placeholder for text output
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            reader = new FileReader();
+            alert(filePath);
+			if(filePath.files && filePath.files[0]) {           
+				reader.onload = function (e) {
+					output = e.target.result;
+					displayContents(output);
+				};//end onload()
+				reader.readAsText(filePath.files[0]);
+			}//end if html5 filelist support
+			else { //this is where you could fallback to Java Applet, Flash or similar
+				return false;
+			}       
+			return true;
+        } else {
+            alert('The File APIs are not fully supported by your browser. Fallback required.');
+            return false;
+        }
+    }   
+
+
+    function displayContents(txt) {
+        var el = document.getElementById('data'); 
+		el.innerHTML = txt; //display output in DOM
+//		el.val = txt;
+    }   */
+    
+    function readText(fileName)
+	{
+		alert(getScriptPath(fileName));
+		file = fopen(getScriptPath(fileName), 0);
+//		alert(file);
+		file_length = flength(file);
+		content = fread(file, file_length);
+		document.getElementById("data").innerText = content;
+	}
+
+////////////////////////////////////////////////////////////////////////
+//                    Ending the file reading part                    //
+////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	function visualiseData() {
 		initialize();
 		//var dataType = getRadioValue();
@@ -219,39 +272,20 @@ html, body {
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
-<body>
+<body onload="readText('file:///home/jabianco/tesis/android/Yan/assets/path.csv');">
+<!--
+<body onload="readText('/home/jabianco/tesis/android/Yan/assets/path.csv');">
+	<div id="read_file">
+		<input type="file" onchange='readText(this)' />
+	</div>
+-->
 	<div id="map_canvas"></div>
 	<p>Paste location data into this text box below, select the type of location data you want to see, and press the "Render" button. It's that easy!</p>
 	<form name="dataForm" action="" method="POST">
 		<div style="float: left;">
 			<textarea id="data" style="width: 500px; height: 75px;" >
--37.81599490000001,144.96441501428572,96,stored,18:29:46
--37.815929014285715,144.9642501857143,91,prx_enter,18:30:46
--37.8163697,144.9636684,60,prx_exit,19:10:51
--37.81354171428571,144.96557667142855,60,network,19:17:06
--37.81354171428571,144.96557667142855,60,network,19:17:06
--37.8134822845459,144.96479272842407,8,gps,19:17:09
--37.81366467475891,144.9651199579239,12,gps,19:17:14
--37.81367540359497,144.965318441391,12,gps,19:17:17
--37.81335890293121,144.9655383825302,12,gps,19:18:01
--37.81326770782471,144.96558666229248,8,gps,19:18:04
--37.81265988333333,144.96521451666666,60,network,19:18:44
--37.81265988333333,144.96521451666666,60,network,19:18:44
--37.813085317611694,144.96561348438263,16,gps,19:18:47
--37.81265988333333,144.96521451666666,60,network,19:18:55
--37.813085317611694,144.96561348438263,16,gps,19:18:57
--37.8129243850708,144.9653559923172,8,gps,19:19:32
--37.81232015,144.9650399875,75,network,19:19:38
--37.812854647636414,144.96531307697296,12,gps,19:19:41
--37.81245231628418,144.96527552604675,16,gps,19:20:03
--37.81236112117767,144.96529698371887,24,gps,19:20:05
--37.812066078186035,144.96495366096497,32,gps,19:20:26
--37.81195342540741,144.96497511863708,32,gps,19:20:34
--37.81169593334198,144.96462643146515,12,gps,19:20:58
--37.81162083148956,144.96458888053894,8,gps,19:21:06
--37.811381688888886,144.9646280222222,54,network,19:21:08
--37.811099809999995,144.96475721,65,network,19:21:53
-</textarea>
+...
+			</textarea>
 		</div>
 		<div style="float: left;">
 			<input type="checkbox" name="dataTypeGPS" checked="checked">Show
