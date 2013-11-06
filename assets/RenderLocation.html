@@ -9,7 +9,7 @@ html, body {
 }
 
 #map_canvas {
-  height: 85%;
+  height: 100%;
   
 }
 </style>
@@ -44,45 +44,29 @@ html, body {
 //              Reading file to show new data in the map              //
 ////////////////////////////////////////////////////////////////////////
 
-/*    var reader; //GLOBAL File Reader object for demo purpose only
-
-	function readText(filePath) {
-        var output = ""; //placeholder for text output
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-            reader = new FileReader();
-            alert(filePath);
-			if(filePath.files && filePath.files[0]) {           
-				reader.onload = function (e) {
-					output = e.target.result;
-					displayContents(output);
-				};//end onload()
-				reader.readAsText(filePath.files[0]);
-			}//end if html5 filelist support
-			else { //this is where you could fallback to Java Applet, Flash or similar
-				return false;
-			}       
-			return true;
-        } else {
-            alert('The File APIs are not fully supported by your browser. Fallback required.');
-            return false;
-        }
-    }   
-
-
-    function displayContents(txt) {
-        var el = document.getElementById('data'); 
-		el.innerHTML = txt; //display output in DOM
-//		el.val = txt;
-    }   */
-    
-    function readText(fileName)
-	{
-		alert(getScriptPath(fileName));
-		file = fopen(getScriptPath(fileName), 0);
-//		alert(file);
-		file_length = flength(file);
-		content = fread(file, file_length);
-		document.getElementById("data").innerText = content;
+function visualiseDataWithParams(data) {
+		initialize();
+		var dataArrays = splitData(data);
+		var bounds = new google.maps.LatLngBounds();
+		
+		if (data.length != 0) {
+			arrays = splitData(data);
+//			if (document.dataForm.dataTypeGPS.checked === true) {
+				drawData(arrays.gps, GPS_COLOR,bounds);
+//			}
+/*
+			if (document.dataForm.dataTypeNetwork.checked === true) {
+				drawData(arrays.network, NETWORK_COLOR, bounds);
+			}
+			if (document.dataForm.dataTypeProximity.checked === true) {
+				drawData(arrays.stored, STORED_COLOR, bounds);
+				drawProximityData(arrays.proximity, bounds);
+			}
+*/
+			map.fitBounds(bounds);
+		} else {
+			alert("No data available.");
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////
@@ -155,7 +139,8 @@ html, body {
 	}
 
 	function splitData(data) {
-		var lineArray = data.split('\n');
+//		var lineArray = data.split('\n');
+		var lineArray = data.split(';');
 		var arrays = {
 			stored : new Array(),
 			network : new Array(),
@@ -272,31 +257,7 @@ html, body {
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
-<body onload="readText('file:///home/jabianco/tesis/android/Yan/assets/path.csv');">
-<!--
-<body onload="readText('/home/jabianco/tesis/android/Yan/assets/path.csv');">
-	<div id="read_file">
-		<input type="file" onchange='readText(this)' />
-	</div>
--->
+<body>
 	<div id="map_canvas"></div>
-	<p>Paste location data into this text box below, select the type of location data you want to see, and press the "Render" button. It's that easy!</p>
-	<form name="dataForm" action="" method="POST">
-		<div style="float: left;">
-			<textarea id="data" style="width: 500px; height: 75px;" >
-...
-			</textarea>
-		</div>
-		<div style="float: left;">
-			<input type="checkbox" name="dataTypeGPS" checked="checked">Show
-			GPS<br /> 
-			<input type="checkbox" name="dataTypeNetwork" >Show
-			network<br /> 
-			<input type="checkbox" name="dataTypeProximity">Show
-			proximity alerts<br /> 
-				<input
-				type="submit" value="Render" onClick="visualiseData(); return false;">
-		</div>
-	</form>
 </body>
 </html>
