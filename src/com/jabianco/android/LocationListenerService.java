@@ -14,7 +14,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-//import android.widget.Toast;
 
 public class LocationListenerService extends Service implements
 		LocationListener {
@@ -33,7 +32,6 @@ public class LocationListenerService extends Service implements
 			Log.i(TAG, "Received intent " + intent.toString());
 			if (PREFERNCES_CHANGED_INTENT.equals(intent.getAction())) {
 				requestLocationUpdates();
-				addProximityAlert();
 			} else if (PROXIMTY_ALERT_INTENT.equals(intent.getAction())) {
 				handleProximityAlert(intent);
 			}
@@ -79,7 +77,6 @@ public class LocationListenerService extends Service implements
 		dbAdapter.open();
 
 		requestLocationUpdates();
-		addProximityAlert();
 
 		// TODO Normally this is declared in the Manifest
 		IntentFilter intentFilter = new IntentFilter();
@@ -94,6 +91,7 @@ public class LocationListenerService extends Service implements
 		super.onDestroy();
 		dbAdapter.close();
 		locationManager.removeUpdates(this);
+		this.unregisterReceiver(this.broadcastReceiver);
 	}
 
 	@Override
@@ -143,27 +141,4 @@ public class LocationListenerService extends Service implements
 					sampleInterval, sampleDistance, this);
 		}
 	}
-
-	private void addProximityAlert() {
-		Log.i(TAG, "addProximityAlert()");
-		int vicinityRadius = ((YanApplication) getApplication())
-				.getPreferences().getVicinityRadius();
-		double latitude = ((YanApplication) getApplication())
-				.getPreferences().getLocation().getLatitude();
-		double longitude = ((YanApplication) getApplication())
-				.getPreferences().getLocation().getLongitude();
-
-		long expiration = -1;
-
-		Intent intent = new Intent(PROXIMTY_ALERT_INTENT);
-		PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0,
-				intent, 0);
-
-		locationManager.addProximityAlert(latitude, longitude, vicinityRadius,
-				expiration, proximityIntent);
-
-		IntentFilter filter = new IntentFilter(PROXIMTY_ALERT_INTENT);
-		registerReceiver(this.broadcastReceiver, filter);
-	}
-
 }

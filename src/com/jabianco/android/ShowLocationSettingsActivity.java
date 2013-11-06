@@ -68,18 +68,15 @@ public class ShowLocationSettingsActivity extends Activity {
 	protected void onPause() {
 		Log.i(TAG, "onPause");
 		super.onPause();
+		Log.i(TAG, "After: super.onPause()");
 
-		EditText editText = (EditText) findViewById(R.id.vicinityradius);
-		int vicinityRadius = Integer.parseInt(editText.getText().toString());
-
-		editText = (EditText) findViewById(R.id.sampleinterval);
+		EditText editText = (EditText) findViewById(R.id.sampleinterval);
 		int sampleInterval = Integer.parseInt(editText.getText().toString());
 
 		editText = (EditText) findViewById(R.id.sampledistance);
 		int sampleDistance = Integer.parseInt(editText.getText().toString());
 
-		storePreferences(storedLocation, vicinityRadius, sampleInterval,
-				sampleDistance);
+		storePreferences(storedLocation, sampleInterval, sampleDistance);
 
 		dbAdapter.close();
 
@@ -106,44 +103,12 @@ public class ShowLocationSettingsActivity extends Activity {
 		Location location = findLastLocation();
 		if (null != location) {
 			currentLocation = location;
-			TextView view = (TextView) findViewById(R.id.currentlocationname);
-			view.setText(location.getProvider());
-			view = (TextView) findViewById(R.id.currentlocationlatitude);
-			view.setText(new DecimalFormat("###.####").format(location
-					.getLatitude()));
-			view = (TextView) findViewById(R.id.currentlocationlongitude);
-			view.setText(new DecimalFormat("###.####").format(location
-					.getLongitude()));
-			view = (TextView) findViewById(R.id.currentlocationspd);
-			view.setText(new DecimalFormat("###.##").format(location.getSpeed()));
-			view = (TextView) findViewById(R.id.currentlocationtime);
-			view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(
-					location.getTime())));
-			view = (TextView) findViewById(R.id.currentlocationaccuracy);
-			view.setText(new DecimalFormat("####").format(location
-					.getAccuracy()));
 		}
 	}
 
 	private void setStoredLocation(Location location) {
 
 		storedLocation = location;
-
-		TextView view = (TextView) findViewById(R.id.storedlocationname);
-		view.setText(location.getProvider());
-		view = (TextView) findViewById(R.id.storedlocationlatitude);
-		view.setText(new DecimalFormat("###.####").format(location
-				.getLatitude()));
-		view = (TextView) findViewById(R.id.storedlocationlongitude);
-		view.setText(new DecimalFormat("###.####").format(location
-				.getLongitude()));
-		view = (TextView) findViewById(R.id.storedlocationspd);
-		view.setText(new DecimalFormat("###.##").format(location.getSpeed()));
-		view = (TextView) findViewById(R.id.storedlocationtime);
-		view.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(location
-				.getTime())));
-		view = (TextView) findViewById(R.id.storedlocationaccuracy);
-		view.setText(new DecimalFormat("####").format(location.getAccuracy()));
 	}
 
 	private Location findLastLocation() {
@@ -183,24 +148,21 @@ public class ShowLocationSettingsActivity extends Activity {
 
 		setStoredLocation(preferences.getLocation());
 
-		EditText view = (EditText) findViewById(R.id.vicinityradius);
-		view.setText(Integer.toString(preferences.getVicinityRadius()));
-
-		view = (EditText) findViewById(R.id.sampleinterval);
+		EditText view = (EditText) findViewById(R.id.sampleinterval);
 		view.setText(Integer.toString(preferences.getSampleInterval()));
 
 		view = (EditText) findViewById(R.id.sampledistance);
 		view.setText(Integer.toString(preferences.getSampleDistance()));
+
 	}
 
-	private void storePreferences(Location location, int vicinityRadius,
-			int sampleInterval, int sampleDistance) {
+	private void storePreferences(Location location, int sampleInterval,
+			int sampleDistance) {
 		Log.i(TAG, "storePreferences");
 
 		Preferences preferences = ((YanApplication) getApplicationContext())
 				.getPreferences();
 		preferences.setLocation(location);
-		preferences.setVicinityRadius(vicinityRadius);
 		preferences.setSampleDistance(sampleDistance);
 		preferences.setSampleInterval(sampleInterval);
 		preferences.store();

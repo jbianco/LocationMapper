@@ -9,7 +9,6 @@ public class Preferences {
 	private static final String TAG = Preferences.class.toString();
 
 	private Location location = null;
-	private int vicinityRadius;
 	private int sampleInterval;
 	private int sampleDistance;
 
@@ -25,17 +24,6 @@ public class Preferences {
 
 	public void setLocation(Location location) {
 		this.location = location;
-	}
-
-	public int getVicinityRadius() {
-		return vicinityRadius;
-	}
-
-	public void setVicinityRadius(int vicinityRadius) {
-		if (vicinityRadius == 0) {
-			vicinityRadius++;
-		}
-		this.vicinityRadius = vicinityRadius;
 	}
 
 	public int getSampleInterval() {
@@ -65,7 +53,6 @@ public class Preferences {
 		this.location.setAccuracy(sharedPreferences.getFloat("accuracy", 0f));
 		this.location.setTime(sharedPreferences.getLong("time", 0l));
 
-		this.vicinityRadius = sharedPreferences.getInt("vicinityradius", 100);
 		this.sampleInterval = sharedPreferences.getInt("sampleinterval", 0);
 		this.sampleDistance = sharedPreferences.getInt("sampledistance", 0);
 	}
@@ -79,7 +66,6 @@ public class Preferences {
 		editor.putFloat("speed", location.getSpeed());
 		editor.putFloat("accuracy", location.getAccuracy());
 		editor.putLong("time", location.getTime());
-		editor.putInt("vicinityradius", vicinityRadius);
 		editor.putInt("sampleinterval", sampleInterval);
 		editor.putInt("sampledistance", sampleDistance);
 

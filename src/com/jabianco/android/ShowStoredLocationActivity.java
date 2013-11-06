@@ -143,12 +143,6 @@ public class ShowStoredLocationActivity extends ListActivity implements
 			}
 		} else {
 			startActivity(new Intent(this, DisplayLocationActivity.class));
-/*			Intent intentApp = new Intent(CurrentActivity.this,
-					ThirdActivity.class);
-			CurrentActivity.this.startActivity(intentApp);
-			Log.i("Content ", " App layout ");*/
-/*			startActivity(new Intent(ShowLocationSettingsActivity.this,  .class));*/
-//			Here we will change the screen to the webview
 		}
 	}
 }

@@ -1,25 +1,15 @@
 package com.jabianco.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 public class DisplayLocationActivity extends Activity {
-
-	/*
-	 * @Override protected void onCreate(Bundle savedInstanceState) {
-	 * super.onCreate(savedInstanceState);
-	 * setContentView(R.layout.activity_display_location);
-	 * 
-	 * WebView webview = new WebView(this); setContentView(webview);
-	 * webview.loadUrl("http://google.com/");
-	 * 
-	 * }
-	 */
-
 	private WebView mWebview;
 
 	@Override
@@ -28,11 +18,8 @@ public class DisplayLocationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		mWebview = new WebView(this);
-
 		mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
-
 		final Activity activity = this;
-
 		mWebview.setWebViewClient(new WebViewClient() {
 
 			@Override
@@ -48,7 +35,6 @@ public class DisplayLocationActivity extends Activity {
 						.show();
 			}
 		});
-		// mWebview.loadUrl("http://maps.google.com");
 		mWebview.loadUrl("file:///android_asset/RenderLocation.html");
 		setContentView(mWebview);
 
@@ -56,9 +42,18 @@ public class DisplayLocationActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.display_location, menu);
+		getMenuInflater().inflate(R.menu.options_menu, menu);
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.settings:
+			startActivity(new Intent(this, ShowLocationSettingsActivity.class));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
