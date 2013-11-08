@@ -1,22 +1,13 @@
 package com.jabianco.android;
 
 import java.io.File;
-//import java.io.FileInputStream;
 import java.io.FileOutputStream;
-//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-//import org.apache.http.client.ClientProtocolException;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.entity.InputStreamEntity;
-//import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,8 +23,15 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.RadioButton;
 import android.widget.Toast;
+//import java.io.FileInputStream;
+//import java.io.FileWriter;
+//import org.apache.http.client.ClientProtocolException;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.entity.InputStreamEntity;
+//import org.apache.http.impl.client.DefaultHttpClient;
 
 public class ShowLocationSettingsActivity extends Activity {
 
@@ -46,6 +44,7 @@ public class ShowLocationSettingsActivity extends Activity {
 	private Location currentLocation = null;
 	private Location storedLocation = null;
 	private Context context = null;
+	private String provider;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,8 @@ public class ShowLocationSettingsActivity extends Activity {
 		dbAdapter = new LocationDbAdapter(this);
 
 		setCurrentLocation();
-
 		restorePreferences();
+		setProvider("gps");
 
 	}
 
@@ -97,6 +96,25 @@ public class ShowLocationSettingsActivity extends Activity {
 		int rows = dbAdapter.clearDatabase();
 		Toast.makeText(this, "Deleted " + rows + " rows.", Toast.LENGTH_SHORT)
 				.show();
+	}
+
+	public void onRadioButtonClicked(View view) {
+		// Is the button now checked?
+		boolean checked = ((RadioButton) view).isChecked();
+
+		// Check which radio button was clicked
+		switch (view.getId()) {
+		case R.id.radio_GPS:
+			if (checked)
+				setProvider("gps");
+			Log.i(TAG, getProvider());
+			break;
+		case R.id.radio_Network:
+			if (checked)
+				setProvider("network");
+			Log.i(TAG, getProvider());
+			break;
+		}
 	}
 
 	private void setCurrentLocation() {
@@ -184,6 +202,14 @@ public class ShowLocationSettingsActivity extends Activity {
 		emailDataTask.execute();
 	}
 
+	public String getProvider() {
+		return provider;
+	}
+
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+
 	private class EmailDataTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... urls) {
@@ -241,15 +267,14 @@ public class ShowLocationSettingsActivity extends Activity {
 				data = cursor.getDouble(2)
 						+ ","
 						+ cursor.getDouble(3)
-						+ cursor.getFloat(6)
 						+ ","
-						+ ","
-						+ cursor.getInt(4)
+						+ cursor.getFloat(5)
 						+ ","
 						+ cursor.getString(1)
 						+ ","
 						+ new SimpleDateFormat("HH:mm:ss").format(new Date(
-								cursor.getLong(5))) + "\n";
+								cursor.getLong(5))) + "," + cursor.getFloat(4)
+						+ "\n";
 				Log.i(TAG, data);
 				outputStreamWriter.write(data);
 				cursor.moveToNext();

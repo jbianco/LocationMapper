@@ -1,48 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:scrollbars="vertical" android:layout_height="fill_parent"
-	android:layout_width="fill_parent" >
-	<TableLayout android:layout_height="fill_parent"
-		android:layout_width="fill_parent" android:id="@+id/tableLayout1">
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="35dp">
-			<TextView android:text="Location Provider Updates" android:layout_margin="2dp"
-				android:layout_weight="2" android:layout_span="5"
-				android:background="#5CB7F0" android:textColor="#FFFFFF" />
-		</TableRow>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="35dp">
-			<TextView android:text="Update interval (minutes):"
-				android:layout_margin="2dp" android:layout_weight="2" android:layout_span="3"/>
-			<EditText android:inputType="number" android:layout_width="wrap_content" android:layout_span="2"
-				android:layout_height="wrap_content" android:id="@+id/sampleinterval">
-			</EditText>
-		</TableRow>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="35dp">
-			<TextView android:text="Update distance (metres):"
-				android:layout_margin="2dp" android:layout_weight="2" android:layout_span="3"/>
-			<EditText android:inputType="number" android:layout_width="wrap_content" android:layout_span="2"
-				android:layout_height="wrap_content" android:id="@+id/sampledistance">
-			</EditText>
-		</TableRow>
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="35dp">
-			<TextView android:text="Database"
-				android:layout_margin="2dp" android:layout_weight="2"
-				android:layout_span="5" android:background="#5CB7F0" android:textColor="#FFFFFF" />
-		</TableRow>
-		<TableRow android:layout_width="fill_parent"
-			android:layout_height="35dp">
-			<TextView android:id="@+id/service" 
-				android:layout_margin="2dp" android:layout_weight="2"
-				android:layout_span="2" android:layout_width="fill_parent" />
-			<Button android:id="@+id/button1" android:layout_margin="2dp"
-				android:layout_weight="2" android:text="Email" android:layout_width="fill_parent"
-				android:layout_height="35dp" android:onClick="onEmailData"></Button>
-			<Button android:id="@+id/button1" android:layout_margin="2dp"
-				android:layout_weight="2" android:layout_width="wrap_content"
-				android:text="Clear" android:layout_height="35dp" android:onClick="onClearDataBase"></Button>
-		</TableRow>
-	</TableLayout>
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical" >
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_span="5"
+                android:layout_weight="2"
+                android:background="#5CB7F0"
+                android:text="Location Provider Updates"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_span="3"
+                android:layout_weight="2"
+                android:text="Update interval (minutes):" />
+
+            <EditText
+                android:id="@+id/sampleinterval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:inputType="number" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_span="3"
+                android:layout_weight="2"
+                android:text="Update distance (metres):" />
+
+            <EditText
+                android:id="@+id/sampledistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:inputType="number" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_span="5"
+                android:layout_weight="2"
+                android:background="#5CB7F0"
+                android:text="Display"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <TableRow android:layout_width="wrap_content" >
+
+            <RadioGroup
+                android:id="@+id/radio_provider"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/radio_GPS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:onClick="onRadioButtonClicked"
+                    android:text="@string/dataTypeGPS" />
+
+                <RadioButton
+                    android:id="@+id/radio_Network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioButtonClicked"
+                    android:text="@string/dataTypeNetwork" />
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_span="5"
+                android:layout_weight="2"
+                android:background="#5CB7F0"
+                android:text="Database"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="35dp" >
+
+            <TextView
+                android:id="@+id/service"
+                android:layout_width="fill_parent"
+                android:layout_margin="2dp"
+                android:layout_span="2"
+                android:layout_weight="2" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_margin="2dp"
+                android:layout_weight="2"
+                android:onClick="onEmailData"
+                android:text="Share" >
+            </Button>
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_margin="2dp"
+                android:layout_weight="2"
+                android:onClick="onClearDataBase"
+                android:text="Clear" >
+            </Button>
+        </TableRow>
+    </TableLayout>
+
 </ScrollView>
