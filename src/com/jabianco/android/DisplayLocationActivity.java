@@ -40,18 +40,22 @@ public class DisplayLocationActivity extends Activity {
 				dbAdapter.open();
 				Cursor cursor = dbAdapter.fetchAllLocations();
 				cursor.moveToFirst();
+				Preferences preferences = ((YanApplication) getApplicationContext())
+						.getPreferences();
 
 				Log.i(TAG, "Writing " + cursor.getCount() + " records.");
 				while (cursor.isAfterLast() == false) {
-					data += separator
-							+ cursor.getDouble(2) + ","
-							+ cursor.getDouble(3) + ","
-							+ cursor.getFloat(5) + ","
-							+ cursor.getString(1) + ","
-							+ new SimpleDateFormat("HH:mm:ss").format(new Date(
-									cursor.getLong(5)));
-					Log.i(TAG, data);
-					separator = ";";
+					if(cursor.getString(1).equals(preferences.getProvider())){
+						data += separator
+								+ cursor.getDouble(2) + ","
+								+ cursor.getDouble(3) + ","
+								+ cursor.getFloat(5) + ","
+								+ cursor.getString(1) + ","
+								+ new SimpleDateFormat("HH:mm:ss").format(new Date(
+										cursor.getLong(5)));
+						Log.i(TAG, data);
+						separator = ";";
+					}
 					cursor.moveToNext();
 				}
 				dbAdapter.close();

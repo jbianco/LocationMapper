@@ -11,6 +11,7 @@ public class Preferences {
 	private Location location = null;
 	private int sampleInterval;
 	private int sampleDistance;
+	private String provider;
 
 	private SharedPreferences sharedPreferences;
 
@@ -40,6 +41,14 @@ public class Preferences {
 
 	public void setSampleDistance(int sampleDistance) {
 		this.sampleDistance = sampleDistance;
+	}
+
+	public String getProvider() {
+		return provider;
+	}
+
+	public void setProvider(String provider) {
+		this.provider = provider;
 	}
 
 	public void load() {

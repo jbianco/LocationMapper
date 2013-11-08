@@ -44,7 +44,6 @@ public class ShowLocationSettingsActivity extends Activity {
 	private Location currentLocation = null;
 	private Location storedLocation = null;
 	private Context context = null;
-	private String provider;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,9 @@ public class ShowLocationSettingsActivity extends Activity {
 
 		setCurrentLocation();
 		restorePreferences();
-		setProvider("gps");
+		Preferences preferences = ((YanApplication) getApplicationContext())
+				.getPreferences();
+		preferences.setProvider("gps");
 
 	}
 
@@ -74,7 +75,7 @@ public class ShowLocationSettingsActivity extends Activity {
 
 		editText = (EditText) findViewById(R.id.sampledistance);
 		int sampleDistance = Integer.parseInt(editText.getText().toString());
-
+		
 		storePreferences(storedLocation, sampleInterval, sampleDistance);
 
 		dbAdapter.close();
@@ -101,18 +102,20 @@ public class ShowLocationSettingsActivity extends Activity {
 	public void onRadioButtonClicked(View view) {
 		// Is the button now checked?
 		boolean checked = ((RadioButton) view).isChecked();
-
+		Preferences preferences = ((YanApplication) getApplicationContext())
+				.getPreferences();
+		
 		// Check which radio button was clicked
 		switch (view.getId()) {
 		case R.id.radio_GPS:
 			if (checked)
-				setProvider("gps");
-			Log.i(TAG, getProvider());
+				preferences.setProvider("gps");
+			Log.i(TAG, preferences.getProvider());
 			break;
 		case R.id.radio_Network:
 			if (checked)
-				setProvider("network");
-			Log.i(TAG, getProvider());
+				preferences.setProvider("network");
+			Log.i(TAG, preferences.getProvider());
 			break;
 		}
 	}
@@ -200,14 +203,6 @@ public class ShowLocationSettingsActivity extends Activity {
 		Log.i(TAG, "onEmailData()");
 		EmailDataTask emailDataTask = new EmailDataTask();
 		emailDataTask.execute();
-	}
-
-	public String getProvider() {
-		return provider;
-	}
-
-	public void setProvider(String provider) {
-		this.provider = provider;
 	}
 
 	private class EmailDataTask extends AsyncTask<String, Void, String> {
