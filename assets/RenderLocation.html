@@ -51,18 +51,8 @@ function visualiseDataWithParams(data) {
 		
 		if (data.length != 0) {
 			arrays = splitData(data);
-//			if (document.dataForm.dataTypeGPS.checked === true) {
-				drawData(arrays.gps, GPS_COLOR,bounds);
-//			}
-
-//			if (document.dataForm.dataTypeNetwork.checked === true) {
-				drawData(arrays.network, NETWORK_COLOR, bounds);
-//			}
-/*			if (document.dataForm.dataTypeProximity.checked === true) {
-				drawData(arrays.stored, STORED_COLOR, bounds);
-				drawProximityData(arrays.proximity, bounds);
-			}
-*/
+			drawData(arrays.gps, GPS_COLOR,bounds);
+			drawData(arrays.network, NETWORK_COLOR, bounds);
 			map.fitBounds(bounds);
 		} else {
 			alert("No data available.");
@@ -128,7 +118,7 @@ function visualiseDataWithParams(data) {
 	function drawData(data, color, bounds) {
 		for ( var i = 0; i < data.length; i++) {
 			var dataValues = data[i].split(',');
-			drawCircle(dataValues[0], dataValues[1], dataValues[2], color, 0.01, dataValues[4]);
+//			drawCircle(dataValues[0], dataValues[1], dataValues[2], color, 0.01, dataValues[4]);
 			bounds.extend(new google.maps.LatLng(dataValues[0], dataValues[1]));
 			if (i>0){
 				previousValues = data[i-1].split(',');
@@ -139,7 +129,6 @@ function visualiseDataWithParams(data) {
 	}
 
 	function splitData(data) {
-//		var lineArray = data.split('\n');
 		var lineArray = data.split(';');
 		var arrays = {
 			stored : new Array(),

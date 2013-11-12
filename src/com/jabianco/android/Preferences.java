@@ -64,6 +64,7 @@ public class Preferences {
 
 		this.sampleInterval = sharedPreferences.getInt("sampleinterval", 0);
 		this.sampleDistance = sharedPreferences.getInt("sampledistance", 0);
+		this.provider = sharedPreferences.getString("provider", "gps");
 	}
 
 	public void store() {
@@ -77,6 +78,7 @@ public class Preferences {
 		editor.putLong("time", location.getTime());
 		editor.putInt("sampleinterval", sampleInterval);
 		editor.putInt("sampledistance", sampleDistance);
+		editor.putString("provider", provider);
 
 		editor.commit();
 	}

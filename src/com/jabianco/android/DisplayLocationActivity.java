@@ -33,7 +33,6 @@ public class DisplayLocationActivity extends Activity {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 
-				// //////////////////////////////////////////////
 				Log.i(TAG, "writeDbDataToTempFile");
 				String data = "";
 				String separator = "";
@@ -45,14 +44,18 @@ public class DisplayLocationActivity extends Activity {
 
 				Log.i(TAG, "Writing " + cursor.getCount() + " records.");
 				while (cursor.isAfterLast() == false) {
-					if(cursor.getString(1).equals(preferences.getProvider())){
+					if (cursor.getString(1).equals(preferences.getProvider())) {
 						data += separator
-								+ cursor.getDouble(2) + ","
-								+ cursor.getDouble(3) + ","
-								+ cursor.getFloat(5) + ","
-								+ cursor.getString(1) + ","
-								+ new SimpleDateFormat("HH:mm:ss").format(new Date(
-										cursor.getLong(5)));
+								+ cursor.getDouble(2)
+								+ ","
+								+ cursor.getDouble(3)
+								+ ","
+								+ cursor.getFloat(5)
+								+ ","
+								+ cursor.getString(1)
+								+ ","
+								+ new SimpleDateFormat("HH:mm:ss")
+										.format(new Date(cursor.getLong(5)));
 						Log.i(TAG, data);
 						separator = ";";
 					}
@@ -61,7 +64,7 @@ public class DisplayLocationActivity extends Activity {
 				dbAdapter.close();
 
 				mWebview.loadUrl("javascript:visualiseDataWithParams('" + data
-						+ "')");				 
+						+ "')");
 			}
 
 			public void onReceivedError(WebView view, int errorCode,
