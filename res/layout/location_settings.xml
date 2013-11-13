@@ -30,7 +30,7 @@
                 android:layout_margin="2dp"
                 android:layout_span="3"
                 android:layout_weight="2"
-                android:text="Update interval (minutes):" />
+                android:text="Update interval (seconds):" />
 
             <EditText
                 android:id="@+id/sampleinterval"

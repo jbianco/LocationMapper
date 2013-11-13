@@ -127,10 +127,10 @@ public class LocationListenerService extends Service implements
 		int sampleDistance = ((YanApplication) getApplication())
 				.getPreferences().getSampleDistance();
 		int sampleInterval = ((YanApplication) getApplication())
-				.getPreferences().getSampleInterval() * 1000 * 60;
+				.getPreferences().getSampleInterval() * 1000; // * 60; //changing minutes to seconds
 		Log.i(TAG, "Setting up location updates with sample distance "
 				+ sampleDistance + " m and sample interval " + sampleInterval
-				+ " ms.");
+				+ " s.");
 
 		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.removeUpdates(this);
