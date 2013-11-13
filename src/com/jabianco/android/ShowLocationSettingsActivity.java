@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 //import java.io.FileInputStream;
 //import java.io.FileWriter;
@@ -75,8 +76,17 @@ public class ShowLocationSettingsActivity extends Activity {
 
 		editText = (EditText) findViewById(R.id.sampledistance);
 		int sampleDistance = Integer.parseInt(editText.getText().toString());
-		
-		storePreferences(storedLocation, sampleInterval, sampleDistance);
+
+		RadioGroup radioButtonGroup = (RadioGroup) findViewById(R.id.radio_provider);
+		int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
+		View radioButton = radioButtonGroup.findViewById(radioButtonID);
+		String provider = "gps";
+		if (radioButtonGroup.indexOfChild(radioButton) == 1) {
+			provider = "network";
+		}
+
+		storePreferences(storedLocation, sampleInterval, sampleDistance,
+				provider);
 
 		dbAdapter.close();
 
@@ -104,7 +114,7 @@ public class ShowLocationSettingsActivity extends Activity {
 		boolean checked = ((RadioButton) view).isChecked();
 		Preferences preferences = ((YanApplication) getApplicationContext())
 				.getPreferences();
-		
+
 		// Check which radio button was clicked
 		switch (view.getId()) {
 		case R.id.radio_GPS:
@@ -175,10 +185,14 @@ public class ShowLocationSettingsActivity extends Activity {
 		view = (EditText) findViewById(R.id.sampledistance);
 		view.setText(Integer.toString(preferences.getSampleDistance()));
 
+		RadioGroup radioButtonGroup = (RadioGroup) findViewById(R.id.radio_provider);
+		View radioButton = radioButtonGroup.getChildAt(preferences
+				.getProvider().equals("gps") ? 0 : 1);
+		radioButtonGroup.check(radioButton.getId());
 	}
 
 	private void storePreferences(Location location, int sampleInterval,
-			int sampleDistance) {
+			int sampleDistance, String provider) {
 		Log.i(TAG, "storePreferences");
 
 		Preferences preferences = ((YanApplication) getApplicationContext())
@@ -186,6 +200,7 @@ public class ShowLocationSettingsActivity extends Activity {
 		preferences.setLocation(location);
 		preferences.setSampleDistance(sampleDistance);
 		preferences.setSampleInterval(sampleInterval);
+		preferences.setProvider(provider);
 		preferences.store();
 	}
 
