@@ -20,14 +20,16 @@ public class DisplayLocationActivity extends Activity {
 	private LocationDbAdapter dbAdapter;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
+	protected void onStart(){
+		
+		super.onStart();
 
 		mWebview = new WebView(this);
 		mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
 		final Activity activity = this;
 		dbAdapter = new LocationDbAdapter(this);
+//		final Activity activity = this;
+
 		mWebview.setWebViewClient(new WebViewClient() {
 
 			@Override
@@ -75,9 +77,8 @@ public class DisplayLocationActivity extends Activity {
 		});
 		mWebview.loadUrl("file:///android_asset/RenderLocation.html");
 		setContentView(mWebview);
-
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -89,6 +90,8 @@ public class DisplayLocationActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.settings:
 			startActivity(new Intent(this, ShowLocationSettingsActivity.class));
+//			mWebview.loadUrl("file:///android_asset/RenderLocation.html");
+//			mWebview.reload();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
