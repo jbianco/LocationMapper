@@ -36,18 +36,19 @@ public class DisplayLocationActivity extends Activity {
 			public void onPageFinished(WebView view, String url) {
 
 				Log.i(TAG, "writeDbDataToTempFile");
-				String data = "";
+				StringBuilder data = new StringBuilder();
 				String separator = "";
 				dbAdapter.open();
-				Cursor cursor = dbAdapter.fetchAllLocations();
-				cursor.moveToFirst();
+				//Cursor cursor = dbAdapter.fetchAllLocations();
+				
 				Preferences preferences = ((YanApplication) getApplicationContext())
 						.getPreferences();
-
+				Cursor cursor = dbAdapter.fetchProvidersLocations(preferences.getProvider());
+				cursor.moveToFirst();
+				
 				Log.i(TAG, "Writing " + cursor.getCount() + " records.");
-				while (cursor.isAfterLast() == false) {
-					if (cursor.getString(1).equals(preferences.getProvider())) {
-						data += separator
+				while (cursor.moveToNext()) {
+						data.append(separator
 								+ cursor.getDouble(2)
 								+ ","
 								+ cursor.getDouble(3)
@@ -57,15 +58,13 @@ public class DisplayLocationActivity extends Activity {
 								+ cursor.getString(1)
 								+ ","
 								+ new SimpleDateFormat("HH:mm:ss")
-										.format(new Date(cursor.getLong(5)));
-						Log.i(TAG, data);
+										.format(new Date(cursor.getLong(6))));
 						separator = ";";
-					}
-					cursor.moveToNext();
 				}
 				dbAdapter.close();
+				Log.i(TAG, data.toString());
 
-				mWebview.loadUrl("javascript:visualiseDataWithParams('" + data
+				mWebview.loadUrl("javascript:visualiseDataWithParams('" + data.toString()
 						+ "')");
 			}
 

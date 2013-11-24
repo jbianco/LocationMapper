@@ -42,7 +42,7 @@
 				android:layout_width="60dp" android:text="Lng" android:gravity="center_horizontal"></TextView>
 			<TextView android:layout_margin="2dp"
 				android:layout_weight="1" android:background="#5CB7F0" android:textColor="#FFFFFF"
-				android:layout_width="50dp" android:text="Spd" android:gravity="center_horizontal"></TextView>
+				android:layout_width="50dp" android:text="Kalman" android:gravity="center_horizontal"></TextView>
 			<TextView android:layout_margin="2dp"
 				android:layout_weight="1" android:background="#5CB7F0" android:textColor="#FFFFFF"
 				android:layout_width="65dp" android:text="Time" android:gravity="center_horizontal"></TextView>

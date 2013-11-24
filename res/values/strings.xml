@@ -11,6 +11,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="dataTypeGPS">GPS</string>
     <string name="dataTypeNetwork">Network</string>
+    <string name="dataTypeKalman">Kalman</string>
     <string name="provider">gps</string>
 
 </resources>

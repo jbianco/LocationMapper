@@ -28,7 +28,7 @@ public class LocationDbAdapter {
 
 	private static final String DATABASE_NAME = "data";
 	private static final String DATABASE_TABLE = "locations";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 6;
 
 	private final Context mCtx;
 
@@ -48,8 +48,13 @@ public class LocationDbAdapter {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.i(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS locations");
-			onCreate(db);
+			// db.execSQL("DROP TABLE IF EXISTS locations");
+			ContentValues cv = new ContentValues();
+			cv.put(KEY_SPEED, 0);
+			if (oldVersion == 5 && newVersion == 6)
+				db.update("locations", cv, null, null);
+			else
+				onCreate(db);
 		}
 	}
 
@@ -104,6 +109,20 @@ public class LocationDbAdapter {
 		return mDb.insert(DATABASE_TABLE, null, contentValues);
 	}
 
+	public long addEstimatedLocation(String provider, double lat, double lng,
+			float acc, long timeStamp, float speed) {
+		Log.i(TAG, "Writing new location:" + provider);
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_NAME, provider);
+		contentValues.put(KEY_LATITUDE, lat);
+		contentValues.put(KEY_LONGITUDE, lng);
+		contentValues.put(KEY_ACCURACY, acc);
+		contentValues.put(KEY_TIME, timeStamp);
+		contentValues.put(KEY_SPEED, speed);
+
+		return mDb.insert(DATABASE_TABLE, null, contentValues);
+	}
+
 	public int clearDatabase() {
 		Log.i(TAG, "clearDatabase()");
 		return mDb.delete(DATABASE_TABLE, null, null);
@@ -116,4 +135,27 @@ public class LocationDbAdapter {
 						KEY_LONGITUDE, KEY_SPEED, KEY_ACCURACY, KEY_TIME },
 				null, null, null, null, null);
 	}
+
+	public Cursor fetchUnproccessedLocations() {
+
+		return mDb.query(DATABASE_TABLE,
+				new String[] { KEY_ROWID, KEY_NAME, KEY_LATITUDE,
+						KEY_LONGITUDE, KEY_SPEED, KEY_ACCURACY, KEY_TIME },
+				KEY_SPEED + " = 0", null, null, null, null);
+	}
+
+	public Cursor fetchProvidersLocations(String providerName) {
+		return mDb.query(DATABASE_TABLE,
+				new String[] { KEY_ROWID, KEY_NAME, KEY_LATITUDE,
+						KEY_LONGITUDE, KEY_SPEED, KEY_ACCURACY, KEY_TIME },
+						KEY_NAME + " = ? ", new String[]{providerName}, null, null, null);
+
+	}
+
+	public void setProcessed() {
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_SPEED, 1);
+		mDb.update("locations", cv, null, null);
+	}
+
 }

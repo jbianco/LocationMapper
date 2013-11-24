@@ -73,7 +73,7 @@ public class Preferences {
 		editor.putString("name", location.getProvider());
 		editor.putFloat("latitude", (float) location.getLatitude());
 		editor.putFloat("longitude", (float) location.getLongitude());
-		editor.putFloat("speed", location.getSpeed());
+		editor.putFloat("speed", 0);
 		editor.putFloat("accuracy", location.getAccuracy());
 		editor.putLong("time", location.getTime());
 		editor.putInt("sampleinterval", sampleInterval);

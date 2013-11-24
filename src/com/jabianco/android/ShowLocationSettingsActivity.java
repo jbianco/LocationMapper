@@ -26,13 +26,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-//import java.io.FileInputStream;
-//import java.io.FileWriter;
-//import org.apache.http.client.ClientProtocolException;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.entity.InputStreamEntity;
-//import org.apache.http.impl.client.DefaultHttpClient;
 
 public class ShowLocationSettingsActivity extends Activity {
 
@@ -83,7 +76,9 @@ public class ShowLocationSettingsActivity extends Activity {
 		String provider = "gps";
 		if (radioButtonGroup.indexOfChild(radioButton) == 1) {
 			provider = "network";
-		}
+		} else if (radioButtonGroup.indexOfChild(radioButton) == 2) {
+			provider = "kalman";
+		} 
 
 		storePreferences(storedLocation, sampleInterval, sampleDistance,
 				provider);
@@ -127,6 +122,12 @@ public class ShowLocationSettingsActivity extends Activity {
 				preferences.setProvider("network");
 			Log.i(TAG, preferences.getProvider());
 			break;
+		case R.id.estimated_Kalman:
+			if (checked)
+				preferences.setProvider("kalman");
+			Log.i(TAG, preferences.getProvider());
+			break;
+
 		}
 	}
 
@@ -186,8 +187,16 @@ public class ShowLocationSettingsActivity extends Activity {
 		view.setText(Integer.toString(preferences.getSampleDistance()));
 
 		RadioGroup radioButtonGroup = (RadioGroup) findViewById(R.id.radio_provider);
-		View radioButton = radioButtonGroup.getChildAt(preferences
-				.getProvider().equals("gps") ? 0 : 1);
+		int radioButtonGroupIndex = 0;
+
+		if (preferences.getProvider().equals("kalman")) {
+			radioButtonGroupIndex = 2;
+		} else if (preferences.getProvider().equals("network")) {
+			radioButtonGroupIndex = 1;
+		} else {
+			radioButtonGroupIndex = 0;
+		}
+		View radioButton = radioButtonGroup.getChildAt(radioButtonGroupIndex);
 		radioButtonGroup.check(radioButton.getId());
 	}
 
@@ -283,7 +292,7 @@ public class ShowLocationSettingsActivity extends Activity {
 						+ cursor.getString(1)
 						+ ","
 						+ new SimpleDateFormat("HH:mm:ss").format(new Date(
-								cursor.getLong(5))) + "," + cursor.getFloat(4)
+								cursor.getLong(6))) + "," + cursor.getFloat(4)
 						+ "\n";
 				Log.i(TAG, data);
 				outputStreamWriter.write(data);

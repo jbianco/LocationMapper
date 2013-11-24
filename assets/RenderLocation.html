@@ -25,6 +25,7 @@ html, body {
 		ACCURACY = 50, 
 		GPS_COLOR = '#FF0000', 
 		NETWORK_COLOR = '#009999', 
+		KALMAN_COLOR = '#006660', 
 		PROXIMITY_ENTER_COLOR = '#00FF00', 
 		PROXIMITY_EXIT_COLOR = '#000000', 
 		STORED_COLOR = '#8800FF';
@@ -40,32 +41,32 @@ html, body {
 		map.setCenter(new google.maps.LatLng(OFFICE_LAT, OFFICE_LNG));
 	}
 
-////////////////////////////////////////////////////////////////////////
-//              Reading file to show new data in the map              //
-////////////////////////////////////////////////////////////////////////
-
-function visualiseDataWithParams(data) {
+	function visualiseDataWithParams(data) {
 		initialize();
-		var dataArrays = splitData(data);
 		var bounds = new google.maps.LatLngBounds();
 		
 		if (data.length != 0) {
-			arrays = splitData(data);
-			drawData(arrays.gps, GPS_COLOR,bounds);
-			drawData(arrays.network, NETWORK_COLOR, bounds);
+			array = splitData(data);
+			var provider=array[0].split(',')[3];
+			var color;
+			switch(provider)
+			{
+				case 'gps':
+					color=GPS_COLOR;
+					break;
+				case 'network':
+					color=NETWORK_COLOR;
+					break;
+				case 'kalman':
+					color=KALMAN_COLOR;
+					break;	
+			}
+			drawData(array, color,bounds);
 			map.fitBounds(bounds);
 		} else {
 			alert("No data available.");
 		}
 	}
-
-////////////////////////////////////////////////////////////////////////
-//                    Ending the file reading part                    //
-////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 	function visualiseData() {
 		initialize();
@@ -130,37 +131,13 @@ function visualiseDataWithParams(data) {
 
 	function splitData(data) {
 		var lineArray = data.split(';');
-		var arrays = {
-			stored : new Array(),
-			network : new Array(),
-			gps : new Array(),
-			proximity : new Array()
-		};
+		var array = new Array();
 
 		for ( var i = 0; i < lineArray.length; i++) {
 			var line = lineArray[i];
-			var provider = line.split(',')[3];
-			var accuracy = line.split(',')[2];
-			switch (provider) {
-			case 'network':
-				arrays.network.push(line);
-				break;
-			case 'gps':
-				arrays.gps.push(line);
-				break;
-			case 'prx_enter':
-				arrays.proximity.push(line);
-				break;
-			case 'prx_exit':
-				arrays.proximity.push(line);
-				break;
-			case 'stored':
-				arrays.stored.push(line);
-				break;
-			}
+			array.push(line);
 		}
-
-		return arrays;
+		return array;
 	}
 
 	function drawConnectingLine(connectingCoordinates, color) {

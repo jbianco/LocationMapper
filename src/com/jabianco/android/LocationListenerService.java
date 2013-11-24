@@ -32,32 +32,7 @@ public class LocationListenerService extends Service implements
 			Log.i(TAG, "Received intent " + intent.toString());
 			if (PREFERNCES_CHANGED_INTENT.equals(intent.getAction())) {
 				requestLocationUpdates();
-			} else if (PROXIMTY_ALERT_INTENT.equals(intent.getAction())) {
-				handleProximityAlert(intent);
 			}
-		}
-
-		private void handleProximityAlert(Intent intent) {
-			Location location = locationManager
-					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (location == null) {
-				location = locationManager
-						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				if (location == null) {
-					// We'll just write an empty location
-					location = new Location("prx");
-				}
-			}
-
-			if (intent.hasExtra(LocationManager.KEY_PROXIMITY_ENTERING)) {
-				if (intent.getBooleanExtra(
-						LocationManager.KEY_PROXIMITY_ENTERING, true) == true) {
-					location.setProvider("prx_enter");
-				} else {
-					location.setProvider("prx_exit");
-				}
-			}
-			addLocationToDB(location);
 		}
 	};
 
@@ -127,7 +102,7 @@ public class LocationListenerService extends Service implements
 		int sampleDistance = ((YanApplication) getApplication())
 				.getPreferences().getSampleDistance();
 		int sampleInterval = ((YanApplication) getApplication())
-				.getPreferences().getSampleInterval() * 1000; // * 60; //changing minutes to seconds
+				.getPreferences().getSampleInterval() * 1000;
 		Log.i(TAG, "Setting up location updates with sample distance "
 				+ sampleDistance + " m and sample interval " + sampleInterval
 				+ " s.");

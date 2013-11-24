@@ -1,5 +1,14 @@
 package com.jabianco.android;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ListActivity;
@@ -9,7 +18,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +39,8 @@ public class ShowStoredLocationActivity extends ListActivity implements
 	private SimpleCursorAdapter cursorAdapter;
 	private Button mapButton;
 	private Button serviceButton;
+	private Cursor locations;
+	private int lastEstimatedRow;
 
 	public SimpleCursorAdapter getCursorAdapter() {
 		return cursorAdapter;
@@ -46,6 +60,74 @@ public class ShowStoredLocationActivity extends ListActivity implements
 			}
 		}
 		return false;
+	}
+
+	private void setLocations() {
+		Log.i(TAG, "setLocations");
+		locations = dbAdapter.fetchUnproccessedLocations();
+	}
+
+	private boolean nextLocation() {
+		// Log.i(TAG, "nextLocation");
+		return locations.moveToNext();
+	}
+
+	private String getLocationProvider() {
+		// Log.i(TAG, "getLocationProvider");
+		return locations.getString(1);
+	}
+
+	private double getLocationLong() {
+		// Log.i(TAG, "getLocationLong");
+		return locations.getDouble(3);
+	}
+
+	private double getLocationLat() {
+		// Log.i(TAG, "getLocationLat");
+		return locations.getDouble(2);
+	}
+
+	private float getLocationAccuracy() {
+		// Log.i(TAG, "getLocationLat");
+		return locations.getFloat(5);
+	}
+
+	private Date getLocationTimeStamp() {
+		// Log.i(TAG, "getLocationLat");
+		return new Date(locations.getLong(6));
+	}
+
+	private void applyKalman() {
+		KalmanGPSSmoother kalman = new KalmanGPSSmoother(1);
+		double measuredLatitude = 0;
+		double measuredLongitude = 0;
+		float measuredAccuracy = 0;
+		long measuredTimeStamp = 0;
+		setLocations();
+
+		while (nextLocation()) {
+			if (getLocationProvider().equals("gps")) {
+				measuredLatitude = getLocationLat();
+				measuredLongitude = getLocationLong();
+				measuredAccuracy = getLocationAccuracy();
+				measuredTimeStamp = getLocationTimeStamp().getTime();
+
+				kalman.Process(measuredLatitude, measuredLongitude,
+						measuredAccuracy, measuredTimeStamp);
+
+				double estimatedLatitude = kalman.get_lat();
+				double estimatedLongitude = kalman.get_lng();
+				float estimatedAccuracy = kalman.get_accuracy();
+				long estimatedTimeStamp = kalman.get_TimeStamp();
+
+				dbAdapter.addEstimatedLocation("kalman", estimatedLatitude,
+						estimatedLongitude, estimatedAccuracy,
+						estimatedTimeStamp, 1);
+			}
+
+		}
+		dbAdapter.setProcessed();
+		Log.i(TAG, "After Kalman execution");
 	}
 
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -102,6 +184,7 @@ public class ShowStoredLocationActivity extends ListActivity implements
 	public void onPause() {
 		Log.i(TAG, "onPause()");
 		super.onPause();
+		// applyKalman();
 		dbAdapter.close();
 		this.unregisterReceiver(this.broadcastReceiver);
 	}
@@ -129,9 +212,15 @@ public class ShowStoredLocationActivity extends ListActivity implements
 				getPackageName(), LocationListenerService.class.getName());
 		Intent i = new Intent().setComponent(locationListenerServiceName);
 		if (v.getId() == R.id.service_button) {
+			/*
+			 * NOTE: Changing behavior to be able to debug the tool without
+			 * looking for new data
+			 */
+
 			TextView buttonText = (TextView) findViewById(R.id.service_button);
 			if (this.isMyServiceRunning()) {
-				stopService(i);
+				stopService(i); 
+				applyKalman();
 				buttonText.setText(getResources().getString(
 						R.string.serviceStart));
 				Log.i(TAG, "location service stopped...");
