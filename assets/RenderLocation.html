@@ -25,10 +25,7 @@ html, body {
 		ACCURACY = 50, 
 		GPS_COLOR = '#FF0000', 
 		NETWORK_COLOR = '#009999', 
-		KALMAN_COLOR = '#006660', 
-		PROXIMITY_ENTER_COLOR = '#00FF00', 
-		PROXIMITY_EXIT_COLOR = '#000000', 
-		STORED_COLOR = '#8800FF';
+		KALMAN_COLOR = '#006660';
 
 	function initialize() {
 		var myOptions = {
@@ -68,54 +65,6 @@ html, body {
 		}
 	}
 
-	function visualiseData() {
-		initialize();
-		//var dataType = getRadioValue();
-		var data = document.getElementById('data').value;
-		var dataArrays = splitData(data);
-		var bounds = new google.maps.LatLngBounds();
-		
-		if (data.length != 0) {
-			arrays = splitData(data);
-			if (document.dataForm.dataTypeGPS.checked === true) {
-				drawData(arrays.gps, GPS_COLOR,bounds);
-			}
-			if (document.dataForm.dataTypeNetwork.checked === true) {
-				drawData(arrays.network, NETWORK_COLOR, bounds);
-			}
-			if (document.dataForm.dataTypeProximity.checked === true) {
-				drawData(arrays.stored, STORED_COLOR, bounds);
-				drawProximityData(arrays.proximity, bounds);
-			}
-			map.fitBounds(bounds);
-		} else {
-			alert("No data available.");
-		}
-	}
-
-	function getRadioValue()
-	{
-	for (var i=0; i < document.dataForm.dataType.length; i++){
-	   if (document.dataForm.dataType[i].checked)
-	      {
-	      return document.dataForm.dataType[i].value;
-	      }
-	   }
-	}
-	
-	function drawProximityData(data, bounds) {
-		for ( var i = 0; i < data.length; i++) {
-			var dataValues = data[i].split(',');
-			drawMarker(dataValues);
-			bounds.extend(new google.maps.LatLng(dataValues[0], dataValues[1]));
-			if (i>0){
-				previousValues = data[i-1].split(',');
-				var connectingCoordinates = [new google.maps.LatLng(dataValues[0], dataValues[1]),new google.maps.LatLng(previousValues[0], previousValues[1])];
-				drawConnectingLine(connectingCoordinates,'#000000');
-			}
-		}
-	}
-
 	function drawData(data, color, bounds) {
 		for ( var i = 0; i < data.length; i++) {
 			var dataValues = data[i].split(',');
@@ -144,8 +93,8 @@ html, body {
 		var line = new google.maps.Polyline({
 			path : connectingCoordinates,
 			strokeColor : color,
-			strokeOpacity : 0.6,
-			strokeWeight : 1,
+			strokeOpacity : 0.4,
+			strokeWeight : 3,
 			map: map
 		});
 	}
