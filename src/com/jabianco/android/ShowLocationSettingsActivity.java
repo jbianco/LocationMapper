@@ -266,7 +266,7 @@ public class ShowLocationSettingsActivity extends Activity {
 			uris.add(u);
 			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 			context.startActivity(Intent.createChooser(emailIntent,
-					"Send mail..."));
+					"Share file..."));
 		}
 
 		private void writeDbDataToTempFile() throws IOException {

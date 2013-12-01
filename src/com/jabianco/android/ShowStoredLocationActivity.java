@@ -40,7 +40,6 @@ public class ShowStoredLocationActivity extends ListActivity implements
 	private Button mapButton;
 	private Button serviceButton;
 	private Cursor locations;
-	private int lastEstimatedRow;
 
 	public SimpleCursorAdapter getCursorAdapter() {
 		return cursorAdapter;
@@ -212,11 +211,6 @@ public class ShowStoredLocationActivity extends ListActivity implements
 				getPackageName(), LocationListenerService.class.getName());
 		Intent i = new Intent().setComponent(locationListenerServiceName);
 		if (v.getId() == R.id.service_button) {
-			/*
-			 * NOTE: Changing behavior to be able to debug the tool without
-			 * looking for new data
-			 */
-
 			TextView buttonText = (TextView) findViewById(R.id.service_button);
 			if (this.isMyServiceRunning()) {
 				stopService(i); 
